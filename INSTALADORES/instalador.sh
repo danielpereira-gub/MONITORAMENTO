@@ -223,7 +223,7 @@ case $opcao in
 			rpm -ivh $URL_ZABBIX
 
 			#INSTALANDO
-			yum install zabbix-proxy-sqlite3 zabbix-agent -ty
+			yum install zabbix-proxy-sqlite3 zabbix-agent -y
 
 			###ENVIANDO PARA O ARQUIVO DE LOG###
 			echo "IP DO ZABBIX SERVER: $zbxip" >> $LOG
