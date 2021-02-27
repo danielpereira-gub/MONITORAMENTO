@@ -240,7 +240,7 @@ case $opcao in
 			mkdir /var/lib/sqlite/
 
 			#DESCOMPACTANDO
-			cd /usr/share/doc/zabbix-proxy-sqlite/
+			cd /usr/share/doc/zabbix-proxy-sqlite3/
 			gzip -d schema.sql.gz
 
 			#IMPORTANDO AS TABELAS
