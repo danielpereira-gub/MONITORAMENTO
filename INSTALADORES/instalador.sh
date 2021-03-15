@@ -1,6 +1,5 @@
 #!bin/bash
 
-
 ##MACROS###
 
 URL_ZABBIX=https://repo.zabbix.com/zabbix/5.3/rhel/8/x86_64/zabbix-release-5.3-1.el8.noarch.rpm
@@ -256,7 +255,8 @@ case $opcao in
 			sed -i "s/# ConfigFrequency=3600/ConfigFrequency=60/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/# DataSenderFrequency=1/DataSenderFrequency=10/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/# ProxyOfflineBuffer=1/ProxyOfflineBuffer=24/g" /etc/zabbix/zabbix_proxy.conf
-
+			sed -i "s/# DBname=zabbix_proxy/DBname=/var/lib/sqlite/zabbix.db/g" /etc/zabbix/zabbix_proxy.conf
+			
 			###ESTARTANDO OS SERVIÇOS###
 			clear
 			systemctl restart zabbix-proxy
