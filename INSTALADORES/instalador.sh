@@ -234,7 +234,7 @@ case $opcao in
 			###BANCO DE DADOS###
 
 			#INSTALANDO
-			dfn install sqlite -y
+			dnf install sqlite -y
 
 			#CRIANDO DIRETORIO
 			mkdir /var/lib/sqlite/
