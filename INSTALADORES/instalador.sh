@@ -3,7 +3,7 @@
 ##MACROS###
 
 URL_ZABBIX=https://repo.zabbix.com/zabbix/5.3/rhel/8/x86_64/zabbix-release-5.3-1.el8.noarch.rpm
-URL_GRAFANA=https://dl.grafana.com/oss/release/grafana-7.4.3-1.x86_64.rpm
+URL_GRAFANA=https://dl.grafana.com/oss/release/grafana-7.5.4-1.x86_64.rpm
 
 ###INICIAL###
 TIME=1
