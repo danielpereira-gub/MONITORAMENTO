@@ -1,11 +1,11 @@
 #!bin/bash
 
-##MACROS###
 
+####MACROS####
 URL_ZABBIX=https://repo.zabbix.com/zabbix/5.3/rhel/8/x86_64/zabbix-release-5.3-1.el8.noarch.rpm
-URL_GRAFANA=https://dl.grafana.com/oss/release/grafana-7.5.4-1.x86_64.rpm
+URL_GRAFANA=https://dl.grafana.com/oss/release/grafana-7.4.3-1.x86_64.rpm
 
-###INICIAL###
+####INICIAL####
 TIME=1
 clear
 yum install epel-release -y
@@ -15,10 +15,10 @@ echo " "
 echo "SEJA BEM VINDO AO PROGRAMA DE INSTALACAO CRIADO POR DANIEL SILVA"
 echo " "			
 
-###MENSAGEM A SER EXIBIDA###
+####MENSAGEM A SER EXIBIDA####
 figlet -c GUBIT
 
-###MENU###
+####MENU####
 echo "ESCOLHA UMA DAS OPÇÕES ABAIXO:
 		
 		1- INSTALAR BANCO DE DADOS PARA O ZABBIX
@@ -35,11 +35,10 @@ case $opcao in
 ####OPÇÕES###		
 		
 		1)
-      ###VARIAVEIS###
+            ###VARIAVEIS###
 			MYSQL="mysql -uroot"
             
-			#MENSAGEM A SER EXIBITA
-			figlet -c GUBIT
+			###MENSAGEM A SER EXIBIDA##
 			echo INICIANDO A INSTALAÇÃO...
 			sleep 15
 
@@ -66,12 +65,12 @@ case $opcao in
 
 			#CRIANDDO BANCO DE DADOS, USUARIO E TROCANDO A SENHA DE ROOT
 			${MYSQL} -e "CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin";
-			${MYSQL} -e "create user 'zabbix'@'$dbhost' identified by 'uNNXKrLMHKRo'";
-			${MYSQL} -e "grant all on zabbix.* to 'zabbix'@'%'";
+			${MYSQL} -e "create user 'zabbix'@'%' identified by 'uNNXKrLMHKRo'";
+			${MYSQL} -e "grant all privileges on zabbix.* to 'zabbix'@'%'";
 			${MYSQL} -e "flush privileges";
 			${MYSQL} -e "set password for 'root'@'localhost' = 'qkoMVoFjUwqMGbqR'";
 
-			### ABRINDO PORTA PARA ACESSO REMOTO ###
+			###ABRINDO PORTA PARA ACESSO REMOTO###
 			iptables -A INPUT -i eht0 -p tcp --destination-port 3306 -j ACCEPT
 
 			systemctl restart mysqld
@@ -93,6 +92,11 @@ case $opcao in
 			;;
 
 		2)
+		
+			###MENSAGEM A SER EXIBIDA##
+			echo INICIANDO A INSTALAÇÃO...
+			sleep 15
+			
 			###UTILITARIOS###
 			yum install net-snmp net-snmp-utils net-tools nano sendmail snmp snmp-mibs-downloader ftp zip -y
 			systemctl start snmpd
@@ -222,7 +226,7 @@ case $opcao in
 			rpm -ivh $URL_ZABBIX
 
 			#INSTALANDO
-			yum install zabbix-proxy-sqlite3 zabbix-agent -y
+			yum install zabbix-proxy-sqlite3 zabbix-agent -ty
 
 			###ENVIANDO PARA O ARQUIVO DE LOG###
 			echo "IP DO ZABBIX SERVER: $zbxip" >> $LOG
@@ -233,13 +237,13 @@ case $opcao in
 			###BANCO DE DADOS###
 
 			#INSTALANDO
-			dnf install sqlite -y
+			dfn install sqlite -y
 
 			#CRIANDO DIRETORIO
 			mkdir /var/lib/sqlite/
 
 			#DESCOMPACTANDO
-			cd /usr/share/doc/zabbix-proxy-sqlite3/
+			cd /usr/share/doc/zabbix-proxy-sqlite/
 			gzip -d schema.sql.gz
 
 			#IMPORTANDO AS TABELAS
@@ -255,8 +259,7 @@ case $opcao in
 			sed -i "s/# ConfigFrequency=3600/ConfigFrequency=60/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/# DataSenderFrequency=1/DataSenderFrequency=10/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/# ProxyOfflineBuffer=1/ProxyOfflineBuffer=24/g" /etc/zabbix/zabbix_proxy.conf
-			sed -i "s/# DBname=zabbix_proxy/DBname=/var/lib/sqlite/zabbix.db/g" /etc/zabbix/zabbix_proxy.conf
-			
+
 			###ESTARTANDO OS SERVIÇOS###
 			clear
 			systemctl restart zabbix-proxy
