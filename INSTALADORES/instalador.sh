@@ -2,14 +2,14 @@
 
 
 ####MACROS####
-URL_ZABBIX=https://repo.zabbix.com/zabbix/5.3/rhel/8/x86_64/zabbix-release-5.3-1.el8.noarch.rpm
+URL_ZABBIX=https://repo.zabbix.com/zabbix/5.2/rhel/8/x86_64/zabbix-release-5.2-1.el8.noarch.rpm
 URL_GRAFANA=https://dl.grafana.com/oss/release/grafana-7.4.3-1.x86_64.rpm
 
 ####INICIAL####
 TIME=1
 clear
-yum install epel-release -y
-yum install figlet -y
+dnf install epel-release -y
+dnf install figlet -y
 clear
 echo " "
 echo "SEJA BEM VINDO AO PROGRAMA DE INSTALACAO CRIADO POR DANIEL SILVA"
@@ -116,7 +116,7 @@ case $opcao in
 			read dbip
 
 			#IMPORTANDO AS TABELAS#
-				zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -h $dbip -uzabbix -p"uNNXKrLMHKRo" zabbix
+				zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -h $dbip -uzabbix -p"uNNXKrLMHKRo" zabbix
 
 			#CONFIGURANDO ZABBIX & TUNNING#
 			sed -i "s/# DBPassword=/DBPassword=uNNXKrLMHKRo/g" /etc/zabbix/zabbix_server.conf
