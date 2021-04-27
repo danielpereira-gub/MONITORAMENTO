@@ -131,7 +131,6 @@ case $opcao in
 			sed -i "s/# StartPollersUnreachable=1/StartPollersUnreachable=10/g" /etc/zabbix/zabbix_server.conf
 			sed -i "s/# StartDiscoverers=1/StartDiscoverers=10/g" /etc/zabbix/zabbix_server.conf
 
-
 			#ALTERANDO TIMEZONE#
 			echo  "php_value[date.timezone] = America/Sao_Paulo" >> /etc/php-fpm.d/zabbix.conf
 
@@ -142,14 +141,11 @@ case $opcao in
 			wget https://raw.githubusercontent.com/danielpereira-gub/ZABBIX_GRAFANA/main/INSTALADORES/PHP_FILE/zabbix.conf
 
 			###ESTARTANDO OS SERVIÇOS###
-			systemctl stop mysqld
-			systemctl disable mysqld
 			systemctl restart httpd php-fpm zabbix-server 
 			systemctl start httpd php-fpm zabbix-server 
 			systemctl enable httpd php-fpm zabbix-server 
 			;;
 		3) 	
-			clear
 
 			###DESABILITANDO O FIREWALL###
 			setenforce 0
@@ -159,9 +155,9 @@ case $opcao in
 			sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
 			###BAIXANDO E INSTALANDO###
-			yum install -y adduser libfontconfig1
+			dnf install -y adduser libfontconfig1
 			wget $URL_GRAFANA
-			um install grafana-7.4.3-1.x86_64.rpm -y
+			dnf install grafana-7.4.3-1.x86_64.rpm -y
 
 			###HABILITANDO####
 			systemctl start grafana-server
@@ -178,6 +174,7 @@ case $opcao in
 			wget https://raw.githubusercontent.com/danielpereira-gub/ZABBIX_GRAFANA/main/INSTALADORES/BACKUPS_SCRIPTS/backup-grafana-ftp.sh
 
 			####RESTARTANDO####
+			systemctl start grafana-server
 			systemctl restart grafana-server
 			;;
 
@@ -207,10 +204,10 @@ case $opcao in
 			###ZABBIX PROXY###
 
 			#BAIXANDO PACOTE
-			rpm -ivh $URL_ZABBIX
+			dnf install $URL_ZABBIX
 
 			#INSTALANDO
-			yum install zabbix-proxy-sqlite3 zabbix-agent -ty
+			dnf install zabbix-proxy-sqlite3 zabbix-agent -ty
 
 			###ENVIANDO PARA O ARQUIVO DE LOG###
 			echo "IP DO ZABBIX SERVER: $zbxip" >> $LOG
@@ -221,7 +218,7 @@ case $opcao in
 			###BANCO DE DADOS###
 
 			#INSTALANDO
-			dfn install sqlite -y
+			dnf install sqlite -y
 
 			#CRIANDO DIRETORIO
 			mkdir /var/lib/sqlite/
@@ -252,10 +249,10 @@ case $opcao in
 			;;
 			
 		5) 	###ZABBIX AGENT###
-			rpm -i $URL_ZABBIX
+			dnf install $URL_ZABBIX
 
 			#INSTALANDO
-			yum install zabbix-agent -y
+			dnf install zabbix-agent -y
 
 			###PERGUNTA NA TELA###
 			echo "DIGITE O IP DO SEU ZABBIX-SERVER"
