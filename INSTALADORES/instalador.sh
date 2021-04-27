@@ -99,7 +99,7 @@ case $opcao in
            		###BANCO DE DADOS###
 
 			#INSTALANDO#
-			dnF install mysql-server -y
+			dnf install mysql-server -y
 			systemctl start mysqld
 
 			###ZABBIX FRONT END E ZABBIX SERVER###
