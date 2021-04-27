@@ -35,17 +35,12 @@ case $opcao in
 ####OPÇÕES###		
 		
 		1)
-            ###VARIAVEIS###
+           		###VARIAVEIS###
 			MYSQL="mysql -uroot"
             
 			###MENSAGEM A SER EXIBIDA##
 			echo INICIANDO A INSTALAÇÃO...
 			sleep 15
-
-			###UTILITARIOS###
-			yum install net-snmp net-snmp-utils net-tools nano sendmail snmp snmp-mibs-downloader ftp zip -y
-			systemctl start snmpd
-			systemctl enable snmpd
 
 			###DESABILITANDO O FIREWALL###
 			setenforce 0
@@ -56,11 +51,8 @@ case $opcao in
 
 			###BANCO DE DADOS###
 
-			#BAIXANDO O PACOTE
-			rpm -ivh https://repo.mysql.com/mysql80-community-release-el8.rpm
-
 			#INSTALANDO
-			yum install mysql-server -y
+			dnf install mysql-server -y
 			systemctl start mysqld
 
 			#CRIANDDO BANCO DE DADOS, USUARIO E TROCANDO A SENHA DE ROOT
@@ -96,11 +88,6 @@ case $opcao in
 			###MENSAGEM A SER EXIBIDA##
 			echo INICIANDO A INSTALAÇÃO...
 			sleep 15
-			
-			###UTILITARIOS###
-			yum install net-snmp net-snmp-utils net-tools nano sendmail snmp snmp-mibs-downloader ftp zip -y
-			systemctl start snmpd
-			systemctl enable snmpd
 
 			###DESABILITANDO O FIREWALL###
 			setenforce 0
@@ -109,25 +96,22 @@ case $opcao in
 			sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/sysconfig/selinux
 			sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
             
-            ###BANCO DE DADOS###
-
-			#BAIXANDO PACOTE#
-			rpm -ivh https://repo.mysql.com/mysql80-community-release-el8.rpm
+           		###BANCO DE DADOS###
 
 			#INSTALANDO#
-			yum install mysql-server -y
+			dnF install mysql-server -y
 			systemctl start mysqld
 
 			###ZABBIX FRONT END E ZABBIX SERVER###
 
 			#BAIXANDO PACOTE#
-			rpm -Uvh $URL_ZABBIX
+			dnf install $URL_ZABBIX
 
 			#INSTALANDO ZABBIX WEB#
 			dnf clean all
-			dnf install zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent -y
+			dnf install zabbix-server zabbix-web-mysql zabbix-apache-conf zabbix-agent -y
             
-            echo "DIGITE O IP DO BANCO DE DADOS"
+            		echo "DIGITE O IP DO BANCO DE DADOS"
 
 			read dbip
 
