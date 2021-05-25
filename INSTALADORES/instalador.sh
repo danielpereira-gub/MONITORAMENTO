@@ -109,14 +109,14 @@ case $opcao in
 
 			#INSTALANDO ZABBIX WEB#
 			dnf clean all
-			dnf install zabbix-server zabbix-web-mysql zabbix-apache-conf zabbix-agent -y
+			dnf install zabbix-server zabbix-sql-scripts zabbix-web-mysql zabbix-apache-conf zabbix-agent -y
             
             		echo "DIGITE O IP DO BANCO DE DADOS"
 
 			read dbip
 
 			#IMPORTANDO AS TABELAS#
-				zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -h $dbip -uzabbix -p"uNNXKrLMHKRo" zabbix
+				zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h $dbip -uzabbix -p"uNNXKrLMHKRo" zabbix
 
 			#CONFIGURANDO ZABBIX & TUNNING#
 			sed -i "s/# DBPassword=/DBPassword=uNNXKrLMHKRo/g" /etc/zabbix/zabbix_server.conf
