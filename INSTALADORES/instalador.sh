@@ -105,7 +105,7 @@ case $opcao in
 			###ZABBIX FRONT END E ZABBIX SERVER###
 
 			#BAIXANDO PACOTE#
-			dnf install $URL_ZABBIX
+			dnf install $URL_ZABBIX -y
 
 			#INSTALANDO ZABBIX WEB#
 			dnf clean all
