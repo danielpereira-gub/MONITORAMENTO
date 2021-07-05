@@ -204,10 +204,10 @@ case $opcao in
 			###ZABBIX PROXY###
 
 			#BAIXANDO PACOTE
-			dnf install $URL_ZABBIX
+			dnf install $URL_ZABBIX -y
 
 			#INSTALANDO
-			dnf install zabbix-proxy-sqlite3 zabbix-agent -ty
+			dnf install zabbix-proxy-sqlite3 zabbix-agent -y
 
 			###ENVIANDO PARA O ARQUIVO DE LOG###
 			echo "IP DO ZABBIX SERVER: $zbxip" >> $LOG
@@ -268,7 +268,7 @@ case $opcao in
 			;;
 		0) 
 			echo SAINDO DO PROGRAMA...
-			sleep $TIME
+			sleep 10
 			exit 0
 			;;
 			
