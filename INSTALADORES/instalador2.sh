@@ -85,7 +85,7 @@ case $opcao in
 
 		2)
 		
-			###MENSAGEM A SER EXIBIDA##
+			###MENSAGEM A SER EXIBIDA###
 			echo INICIANDO A INSTALAÇÃO...
 			sleep 15
 
@@ -134,12 +134,6 @@ case $opcao in
 			###ALTERANDO TIMEZONE###
 			echo  "php_value[date.timezone] = America/Sao_Paulo" >> /etc/php-fpm.d/zabbix.conf
 
-			###DEFININDO O ZABBIX PARA PAGINA PADRAO###
-			cp -r /usr/share/zabbix/* /var/www/html/
-			rm -r /etc/httpd/conf.d/zabbix.conf
-			cd /etc/httpd/conf.d/
-			wget https://raw.githubusercontent.com/danielpereira-gub/ZABBIX_GRAFANA/main/INSTALADORES/PHP_FILE/zabbix.conf
-
 			###REINICIANDO OS SERVIÇOS###
 			systemctl restart httpd php-fpm zabbix-server 
 			systemctl start httpd php-fpm zabbix-server 
@@ -165,8 +159,6 @@ case $opcao in
 
 			###PLUGINS###
 			grafana-cli plugins install alexanderzobnin-zabbix-app
-			grafana-cli plugins install grafana-piechart-panel
-			grafana-cli plugins install grafana-clock-panel
 			
 			###BACKUP###
 			mkdir backup_grafana
@@ -207,7 +199,7 @@ case $opcao in
 			dnf install $URL_ZABBIX -y
 
 			#INSTALANDO
-			dnf install zabbix-proxy-sqlite3 zabbix-agent -y
+			dnf install zabbix-proxy-sqlite3 zabbix-agent zabbix-sql-scripts -y
 
 			###ENVIANDO PARA O ARQUIVO DE LOG###
 			echo "IP DO ZABBIX SERVER: $zbxip" >> $LOG
@@ -224,7 +216,7 @@ case $opcao in
 			mkdir /var/lib/sqlite/
 
 			#DESCOMPACTANDO
-			cd /usr/share/doc/zabbix-proxy-sqlite/
+			cd /usr/share/doc/zabbix-sql-scripts/sqlite3/
 			gzip -d schema.sql.gz
 
 			#IMPORTANDO AS TABELAS
@@ -237,9 +229,11 @@ case $opcao in
 			sed -i "s/# ProxyMode=0/ProxyMode=0/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/Server=127.0.0.1/Server=$zbxip/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/Hostname=Zabbix proxy/Hostname=$zbxname/g" /etc/zabbix/zabbix_proxy.conf
-			sed -i "s/# ConfigFrequency=3600/ConfigFrequency=60/g" /etc/zabbix/zabbix_proxy.conf
+			sed -i "s/# ConfigFrequency=3600/ConfigFrequency=180/g" /etc/zabbix/zabbix_proxy.conf
 			sed -i "s/# DataSenderFrequency=1/DataSenderFrequency=10/g" /etc/zabbix/zabbix_proxy.conf
-			sed -i "s/# ProxyOfflineBuffer=1/ProxyOfflineBuffer=24/g" /etc/zabbix/zabbix_proxy.conf
+			sed -i "s/# ProxyOfflineBuffer=1/ProxyOfflineBuffer=72/g" /etc/zabbix/zabbix_proxy.conf
+            sed -i "s/DBName=zabbix-proxy/DBName=/var/lib/sqlite/zabbix.db/g" /etc/zabbix/zabbix_proxy.conf
+            sed -i "s/# CacheSize=8M/CacheSize=128M/g"  /etc/zabbix/zabbix_proxy.conf
 
 			###REINICIANDO O SERVIÇO###
 			clear
